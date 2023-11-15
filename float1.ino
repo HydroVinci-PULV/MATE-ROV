@@ -1,12 +1,17 @@
 //include <EEPROM.h>
+#include <SimpleDHT.h>
+#include <RCSwitch.h>
+
+
+
 int adress=0; 
-int in1Pin = 10;
+int in1Pin = 11;
 int in2Pin = 9; //broches de contrôle du moteur
 //unsigned long startTime;//pour mesurer les tp de départ des moteurs
 int sensorPin = 5; //broche d'un capteur
 //int toursEffectues = 0;       // Compteur de tours
 const int enablePin=7
-
+RCSwitch mySwitch=RCSwitch();
 /*
 Il faut faire les algos de communication et de récupération de donnés, voir comment gérer les signaux pour activer le start 
 et interpréter la profondeur. Ainsi que tester le tt qd on pourras utiliser les batteries.
@@ -22,21 +27,32 @@ void setup() {
   digitalWrite(in2Pin,LOW);//on mes les pin low pour que le moteur ne tourne pas dès le debut
   pinMode(sensorPin, INPUT);
   analogWrite(enablePin,150);
- // Serial.begin(9600);
+  Serial.begin(9600);
+  //mySwitch.enableTransmit(10);
 }
 
 void loop() {
   // Vérifier si le bouton est enfoncé
   if (digitalRead(sensorpin) == HIGH) {
     // allumer le moteur
+    communication();
     for (int i=0;i<2;i++){
     digitalWrite(in1Pin,HIGH);
     start();
     communication();
+    data=reset_data();
     }
+    break;
     }
-  break;
+  
 }
+
+void communication(data){
+       mySwitch.enableTransmit(10);
+       if (strlen(data)==0) mySwitch.send(default_data);
+       else mySwitch.send(data);
+       mySwitch.disableTransmit();
+  }
 
 
 void start()
@@ -59,6 +75,4 @@ void start()
       delay(1000);
       digitalWrite(in2pin,LOW);
     }
-
-
   }
