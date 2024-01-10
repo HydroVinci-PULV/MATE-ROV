@@ -1,0 +1,31 @@
+[package]
+name = "motors1"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rppal = { version = "0.16.1", features = ["hal"] }
+mpu6050="0.1.6"
+embedded-hal = "0.2.7"
+
+[[bin]]
+name="tt"
+path="src/tt.rs"
+
+[[bin]]
+name="servo"
+path="src/servo.rs"
+
+[[bin]]
+name="blink"
+path="src/blink.rs"
+
+[[bin]]
+name="gyro"
+path="src/gyro.rs"
+
+[[bin]]
+name="motor"
+path="src/motor.rs"
