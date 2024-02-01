@@ -1,1 +1,1 @@
-/home/pi/MATEROV/MATE-ROV/double_mot/target/debug/double_mot: /home/pi/MATEROV/MATE-ROV/double_mot/src/main.rs
+/mnt/c/matrov/code\ from\ git/MATE-ROV/target/debug/double_mot: /mnt/c/matrov/code\ from\ git/MATE-ROV/src/main.rs

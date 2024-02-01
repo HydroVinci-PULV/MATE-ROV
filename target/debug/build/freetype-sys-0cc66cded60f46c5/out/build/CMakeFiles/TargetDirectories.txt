@@ -1,0 +1,10 @@
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/freetype.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/dist.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/package.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/package_source.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/edit_cache.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/list_install_components.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/install.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/install/local.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/freetype-sys-0cc66cded60f46c5/out/build/CMakeFiles/install/strip.dir

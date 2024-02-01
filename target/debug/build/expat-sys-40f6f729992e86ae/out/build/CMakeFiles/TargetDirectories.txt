@@ -1,0 +1,7 @@
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/expat.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/edit_cache.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/list_install_components.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/install.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/install/local.dir
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/build/CMakeFiles/install/strip.dir

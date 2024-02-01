@@ -1,25 +1,24 @@
 use std::error::Error;
-use std::thread;
-use std::time::Duration;
-use std::io;
-use std::fs::File;
+//use std::thread;
+
+//use std::fs::File;
 use rppal::pwm::{Channel, Polarity, Pwm};
-use buttons::Buttons;
-use std::collectiohns::HashSet;
 use evdev::{Device,Key,EventType};
-//#[cfg(feature="winit")]
-//use winit::{event::*, event_loop::{ControlFlow,EventLoop}};
-//#[cfg(feature="winit")]
+//use tokio::stream;
+
+
 
 const FREQUENCY_HZ: u64 = 1000;
-
+//#[tokio::main]
 fn main() -> Result<(), Box<dyn Error>>{
    // let event_loop=winit::event_loop::EventLoop::new();
 
    // let mut keyboard=buttons::winit::keyboard();
-    let file =File::open("dev/input/event0")?;
-    let mut device=Device::new().unwrap();
-    device.set_file(file);
+    //let file =File::open("dev/input/event0")?;
+    //let mut device=Device::open("dev/input/event0").unwrap();
+    //device.set_file(file);
+    //let file = tokio::fs::File::open("/dev/input/event0").await?;
+    let mut device = Device::open("/dev/input/event0")?;
 
 
     let pwm0 = Pwm::with_frequency(
@@ -66,39 +65,65 @@ fn main() -> Result<(), Box<dyn Error>>{
 
 
     })*/
-
     loop{
         for ev in device.fetch_events()?{
-            if ev.is_key(){
-                match ev.value{
+        if ev.event_type() == EventType::KEY {
+            let key = Key::new(ev.code());
+                match ev.value(){
                     1=>{
-                        if let Some(key)=ev.code.key(){
+                        
                             println!("key pressed: {:?}", key);
                             match key{
-                            Key::KEY_UP{
-                                pwm0.set_polarity(Normal)?;
+                            Key::KEY_UP=>{
+                                pwm0.set_polarity(Polarity::Normal)?;
                                 pwm0.set_duty_cycle(0.75)?;
-                            }
-                            Key::KEY_DOWN{}
-                            Key::KEY_LEFT{}
-                            Key::KEY_RIGHT{}
-
+                            },
+                            Key::KEY_DOWN=>{pwm0.set_polarity(Polarity::Inverse)?;
+                                          pwm0.set_duty_cycle(0.75)?;
+                            },
+                            Key::KEY_LEFT=>{pwm1.set_polarity(Polarity::Normal)?;
+                                pwm1.set_duty_cycle(0.75)?;
+                            },
+                            Key::KEY_RIGHT=>{pwm1.set_polarity(Polarity::Inverse)?;
+                                pwm1.set_duty_cycle(0.75)?;
+                            },
+                            _=>println!("no recognised command"),
+                        
                         }
-                        }
-                    }
+                    
+                    },
                     0=>{
-
+                        
+                        println!("Key released: {:?}", key);
+                        match key{
+                                Key::KEY_UP=>{
+                                    
+                                    pwm0.set_duty_cycle(0.0)?;
+                                },
+                                Key::KEY_DOWN=>{
+                                              pwm0.set_duty_cycle(0.0)?;
+                                },
+                                Key::KEY_LEFT=>{
+                                    pwm1.set_duty_cycle(0.0)?;
+                                },
+                                Key::KEY_RIGHT=>{
+                                    pwm1.set_duty_cycle(0.0)?;
+                                },
+                                _=>println!("no recognised command"),
+                        }
+                    },
+                    _=>println!("no recognised command"),
                     }
                 }
             }
-        }
+        
     }
-
-
-
-
-    }
-
-
-
 }
+
+
+
+
+    
+
+
+

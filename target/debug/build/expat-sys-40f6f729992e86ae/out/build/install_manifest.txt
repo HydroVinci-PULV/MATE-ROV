@@ -1,0 +1,4 @@
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/lib/libexpat.a
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/include/expat.h
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/include/expat_external.h
+/mnt/c/matrov/code from git/MATE-ROV/target/debug/build/expat-sys-40f6f729992e86ae/out/lib/pkgconfig/expat.pc
