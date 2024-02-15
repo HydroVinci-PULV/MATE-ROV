@@ -1,0 +1,15 @@
+[package]
+name = "communications"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rppal = { version = "0.16.1", features = ["hal"] }
+embedded-hal = "0.2.7"
+tokio = { version = "1", features = ["full"] }
+
+[[bin]]
+name="led"
+path="src/led.rs"
