@@ -1,0 +1,12 @@
+/mnt/c/matrov/communications/communications/target/debug/deps/liblibudev-baddfb3a4932e328.rmeta: /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/lib.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/context.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/device.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/enumerator.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/error.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/monitor.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/handle.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/util.rs
+
+/mnt/c/matrov/communications/communications/target/debug/deps/libudev-baddfb3a4932e328.d: /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/lib.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/context.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/device.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/enumerator.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/error.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/monitor.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/handle.rs /home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/util.rs
+
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/lib.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/context.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/device.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/enumerator.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/error.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/monitor.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/handle.rs:
+/home/unix/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libudev-0.3.0/src/util.rs:

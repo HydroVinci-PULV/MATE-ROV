@@ -1,0 +1,11 @@
+C:\matrov\communications\communications\target\debug\deps\liblibc-05ec41184e9922cb.rmeta: C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\lib.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\macros.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\fixed_width_ints.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\mod.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\msvc\mod.rs
+
+C:\matrov\communications\communications\target\debug\deps\liblibc-05ec41184e9922cb.rlib: C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\lib.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\macros.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\fixed_width_ints.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\mod.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\msvc\mod.rs
+
+C:\matrov\communications\communications\target\debug\deps\libc-05ec41184e9922cb.d: C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\lib.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\macros.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\fixed_width_ints.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\mod.rs C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\msvc\mod.rs
+
+C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\lib.rs:
+C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\macros.rs:
+C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\fixed_width_ints.rs:
+C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\mod.rs:
+C:\Users\math\.cargo\registry\src\index.crates.io-6f17d22bba15001f\libc-0.2.153\src\windows\msvc\mod.rs:
