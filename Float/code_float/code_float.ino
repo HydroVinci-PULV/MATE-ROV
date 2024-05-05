@@ -1,7 +1,7 @@
 
 // CONSTANTS
 const float pressureOffSet = 0.478; // Calibrate with the smallest value at rest
-const int pressureDataCount = 10;
+const int pressureDataCount = 100;
 
 // PIN ASSIGNMENTS
 int sens1 = 3;              // Pin sens remplissage
@@ -25,7 +25,7 @@ float pressureDataKilopascal[pressureDataCount];
 
 struct SPressureData
 {
-  float pressureBit;
+  unsigned short pressureBit;
   float pressureVoltage;
   float pressureKilopascal;
 };
@@ -53,6 +53,9 @@ void setup()
   digitalWrite(ascent, LOW);
   digitalWrite(dive, LOW);
   digitalWrite(detection, LOW);
+
+  Serial.println("Data sizeof ");
+  Serial.println((int)sizeof(pressureDataBit) / (int)sizeof(pressureDataBit[0]));
 }
 
 // Fonction d'attente initiale
@@ -126,19 +129,29 @@ SPressureData collectPressureData(int pinPressureSensor)
   pressureVoltage = pressureBit * 5.00 / 1024;                   // Sensor output voltage
   pressureKilopascal = (pressureVoltage - pressureOffSet) * 250; // Calculate water pressure
 
-  Serial.print("Voltage:");
-  Serial.print(pressureVoltage, 3);
+  Serial.println("Recording pressure");
+  // Serial.print("Voltage:");
+  // Serial.print(pressureVoltage, 3);
 
   SPressureData pressureData = {pressureBit, pressureVoltage, pressureKilopascal};
   return pressureData;
 }
-bool storePressureData(float pressureData[], float pressureKilopascal)
+
+int storePressureData(
+    SPressureData inputPressure,
+    unsigned short pressureDataBit[],
+    float pressureDataKilopascal[])
 {
-  for (int i = 0; i < sizeof(pressureData); i++)
+  bool dataStored = true;
+  int index = addShortToLastAvailableIndex(inputPressure.pressureBit, pressureDataBit);
+  int indexKilopascal = addFloatToLastAvailableIndex(inputPressure.pressureKilopascal, pressureDataKilopascal);
+
+  if (index <= -1)
   {
-    pressureData[i] = pressureData[i + 1];
+    dataStored = false;
   }
-  pressureData[sizeof(pressureData)] = pressureKilopascal;
+  // return dataStored;
+  return index;
 }
 bool isDataFull()
 {
@@ -155,13 +168,16 @@ void sendDataThroughBluetooth()
 }
 
 // UTILS
-void printPressureDataArray()
+void printDataArray(unsigned short array[])
 {
+  int count = (int)sizeof(array) / (int)sizeof(array[0]);
   Serial.print("Data : ");
-  for (int i = 0; i < 10; i++)
+  Serial.print((int)sizeof(array));
+  Serial.print(" : ");
+  for (int i = 0; i < count; i++)
   {
     // Serial.print(i);
-    Serial.print(pressureDataKilopascal[i], 1);
+    Serial.print(array[i]);
     Serial.print(", ");
   }
   Serial.println();
@@ -172,19 +188,39 @@ void printData(float value, int length = 1)
   Serial.print(value, length);
   Serial.println("; ");
 }
-int addValueToLastAvailableIndex(float value, float array[])
+int addShortToLastAvailableIndex(unsigned short value, unsigned short array[])
 {
-  for (int i = 0; i < sizeof(array); i++)
+  int count = (int)sizeof(array) / (int)sizeof(array[0]);
+  Serial.print("Count : ");
+  Serial.println(count);
+  for (int i = 0; i < count; i++)
   {
+    // Serial.println(i);
     if (array[i] == 0)
     {
       array[i] = value;
+      // Serial.println(array[i]);
       return i;
     }
   }
   return -1;
 }
+int addFloatToLastAvailableIndex(float value, float array[])
+{
 
+  int count = sizeof(array) / sizeof(array[0]);
+  for (int i = 0; i < count; i++)
+  {
+    // Serial.println(i);
+    if (array[i] == 0)
+    {
+      array[i] = value;
+      // Serial.println(array[i]);
+      return i;
+    }
+  }
+  return -1;
+}
 void floatProcedureSequence()
 {
 
@@ -219,8 +255,23 @@ void loop()
 
   // floatProcedureSequence();
 
-  printData(collectPressureData(pinPressureSensor));
+  SPressureData pressureData = collectPressureData(pinPressureSensor);
 
-  // printPressureDataArray();
+  // Serial.println(pressureData.pressureBit);
+  // Serial.println(pressureData.pressureVoltage);
+  // Serial.println(pressureData.pressureKilopascal);
+
+  int isStored = storePressureData(pressureData, pressureDataBit, pressureDataKilopascal);
+  Serial.println(isStored);
+
+  printDataArray(pressureDataBit);
+
+  if (!isStored)
+  {
+    // Serial.println("Data not stored");
+  }
+  // printData(collectPressureData(pinPressureSensor).pressureKilopascal);
+
+  // printDataArray(pressureDataBit);
   delay(1000);
 }
