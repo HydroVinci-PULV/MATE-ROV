@@ -1,0 +1,226 @@
+
+// CONSTANTS
+const float pressureOffSet = 0.478; // Calibrate with the smallest value at rest
+const int pressureDataCount = 10;
+
+// PIN ASSIGNMENTS
+int sens1 = 3;              // Pin sens remplissage
+int sens2 = 8;              // Pin sens vidage
+int speed = 2;              // Pin vitesse moteur
+int wait = 10;              // Couleur pour led RGB
+int dive = 11;              // Couleur pour led RGB
+int ascent = 12;            // Couleur pour led RGB
+int detection = 7;          // Alimentation des butées
+int detectLow = A0;         // Butée basse
+int detectHigh = A1;        // Butée haute
+int pinPressureSensor = A2; // Capteur de pression
+int lightSensor = A6;       // Photorésistance
+int seuilDetectionL = 980;  // Seuil de détection photorésistance
+int seuilDetectionB = 980;  // Seuil de détection butées
+
+unsigned short pressureBit;
+unsigned short pressureDataBit[pressureDataCount];
+float pressureVoltage, pressureKilopascal;
+float pressureDataKilopascal[pressureDataCount];
+
+struct SPressureData
+{
+  float pressureBit;
+  float pressureVoltage;
+  float pressureKilopascal;
+};
+
+void setup()
+{
+  Serial.begin(9600);
+
+  // Initialize pin modes
+  pinMode(sens1, OUTPUT);
+  pinMode(sens2, OUTPUT);
+  pinMode(speed, OUTPUT);
+  pinMode(wait, OUTPUT);
+  pinMode(dive, OUTPUT);
+  pinMode(ascent, OUTPUT);
+  pinMode(detection, OUTPUT);
+  pinMode(detectLow, INPUT);
+  pinMode(detectHigh, INPUT);
+
+  // Initialize pin values
+  digitalWrite(sens1, LOW);
+  digitalWrite(sens2, LOW);
+  digitalWrite(speed, LOW);
+  digitalWrite(wait, LOW);
+  digitalWrite(ascent, LOW);
+  digitalWrite(dive, LOW);
+  digitalWrite(detection, LOW);
+}
+
+// Fonction d'attente initiale
+void initialWait()
+{
+  digitalWrite(wait, HIGH);
+  delay(100);
+  digitalWrite(wait, LOW);
+  delay(1400);
+}
+void waitx(int time) // Fonction d'attente interphase
+{
+  digitalWrite(wait, HIGH);
+  digitalWrite(ascent, LOW);
+  digitalWrite(dive, LOW);
+  delay(time);
+}
+void countdown(int time, int phase) // Prévient d'un changement de phase
+{
+  for (int i = 0; i < time; i++)
+  {
+    digitalWrite(phase, HIGH);
+    delay(500);
+    digitalWrite(phase, LOW);
+    delay(500);
+  }
+}
+void divex(int fillingSpeed) // Fonction de plongée
+{
+  digitalWrite(wait, LOW);
+  digitalWrite(ascent, LOW);
+  digitalWrite(dive, HIGH);
+  delay(2000);
+  digitalWrite(detection, HIGH);
+  while (analogRead(detectHigh) < seuilDetectionB)
+  {
+    digitalWrite(sens1, HIGH);
+    digitalWrite(sens2, LOW);
+    analogWrite(speed, fillingSpeed);
+  }
+  digitalWrite(detection, LOW);
+  digitalWrite(sens1, LOW);
+  digitalWrite(sens2, LOW);
+  digitalWrite(dive, LOW);
+  analogWrite(speed, 0);
+}
+void ascentx(int fillingSpeed) // Fonction d'ascension
+{
+  digitalWrite(wait, LOW);
+  digitalWrite(ascent, HIGH);
+  digitalWrite(dive, LOW);
+  delay(2000);
+  digitalWrite(detection, HIGH);
+
+  while (analogRead(detectLow) < seuilDetectionB)
+  {
+    digitalWrite(sens1, LOW);
+    digitalWrite(sens2, HIGH);
+    analogWrite(speed, fillingSpeed);
+  }
+  digitalWrite(detection, LOW);
+  digitalWrite(sens1, LOW);
+  digitalWrite(sens2, LOW);
+  digitalWrite(ascent, LOW);
+  analogWrite(speed, 0);
+}
+
+SPressureData collectPressureData(int pinPressureSensor)
+{
+  pressureBit = analogRead(pinPressureSensor);
+  pressureVoltage = pressureBit * 5.00 / 1024;                   // Sensor output voltage
+  pressureKilopascal = (pressureVoltage - pressureOffSet) * 250; // Calculate water pressure
+
+  Serial.print("Voltage:");
+  Serial.print(pressureVoltage, 3);
+
+  SPressureData pressureData = {pressureBit, pressureVoltage, pressureKilopascal};
+  return pressureData;
+}
+bool storePressureData(float pressureData[], float pressureKilopascal)
+{
+  for (int i = 0; i < sizeof(pressureData); i++)
+  {
+    pressureData[i] = pressureData[i + 1];
+  }
+  pressureData[sizeof(pressureData)] = pressureKilopascal;
+}
+bool isDataFull()
+{
+}
+
+void plotPressureData()
+{
+}
+void ascentIfPressureStable()
+{
+}
+void sendDataThroughBluetooth()
+{
+}
+
+// UTILS
+void printPressureDataArray()
+{
+  Serial.print("Data : ");
+  for (int i = 0; i < 10; i++)
+  {
+    // Serial.print(i);
+    Serial.print(pressureDataKilopascal[i], 1);
+    Serial.print(", ");
+  }
+  Serial.println();
+}
+void printData(float value, int length = 1)
+{
+  Serial.print("Data : ");
+  Serial.print(value, length);
+  Serial.println("; ");
+}
+int addValueToLastAvailableIndex(float value, float array[])
+{
+  for (int i = 0; i < sizeof(array); i++)
+  {
+    if (array[i] == 0)
+    {
+      array[i] = value;
+      return i;
+    }
+  }
+  return -1;
+}
+
+void floatProcedureSequence()
+{
+
+  while (analogRead(lightSensor) < seuilDetectionL)
+  {
+    initialWait();
+  }
+  ascentx(255);
+
+  // Initial waiting time
+  waitx(5000);
+  countdown(5, wait);
+
+  // Initiating dive
+  divex(255);
+
+  // Mid-waiting
+  waitx(5000);
+  countdown(5, wait);
+
+  // Initiating ascent
+  ascentx(255);
+
+  // Final waiting
+  waitx(5000);
+  countdown(5, wait);
+}
+
+void loop()
+{
+  millis();
+
+  // floatProcedureSequence();
+
+  printData(collectPressureData(pinPressureSensor));
+
+  // printPressureDataArray();
+  delay(1000);
+}
