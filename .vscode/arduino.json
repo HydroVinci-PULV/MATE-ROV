@@ -1,7 +1,6 @@
 {
-    "board": "arduino:avr:nano",
-    "port": "COM7",
-    "sketch": "Float\\code_float\\code_float.ino",
-    "configuration": "cpu=atmega328",
+    "board": "arduino:mbed_nano:nano33ble",
+    "port": "COM6",
+    "sketch": "Float\\pressure_sensor\\pressure_sensor.ino",
     "programmer": "avrisp"
 }

@@ -1,7 +1,7 @@
 
 // CONSTANTS
 const float pressureOffSet = 0.478; // Calibrate with the smallest value at rest
-const int pressureDataCount = 100;
+const int pressureDataCount = 180;  // 180 max = 15min / 5sec(each measurement)
 
 // PIN ASSIGNMENTS
 int sens1 = 3;              // Pin sens remplissage
@@ -30,6 +30,15 @@ struct SPressureData
   float pressureKilopascal;
 };
 
+bool initializeArray(unsigned short arr[], short value = 0)
+{
+  for (int i = 0; i < sizeArray(arr); i++)
+  {
+    arr[i] = value;
+  }
+  return true;
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -55,7 +64,10 @@ void setup()
   digitalWrite(detection, LOW);
 
   Serial.println("Data sizeof ");
-  Serial.println((int)sizeof(pressureDataBit) / (int)sizeof(pressureDataBit[0]));
+  Serial.println((int)sizeof(pressureDataBit));
+
+  bool initialized = initializeArray(pressureDataBit);
+  Serial.println(initialized);
 }
 
 // Fonction d'attente initiale
@@ -123,13 +135,31 @@ void ascentx(int fillingSpeed) // Fonction d'ascension
   analogWrite(speed, 0);
 }
 
-SPressureData collectPressureData(int pinPressureSensor)
+int count(unsigned short arr[])
+{
+  int i;
+  int count = 0;
+  for (i = 0; arr[i] != '\0'; i++)
+  {
+    count++;
+  }
+  return count;
+}
+int sizeArray(unsigned short arr[])
+{
+  return sizeof(arr) / sizeof(arr[0]);
+}
+
+filterData()
+
+    SPressureData collectPressureData(int pinPressureSensor, bool debug = false)
 {
   pressureBit = analogRead(pinPressureSensor);
   pressureVoltage = pressureBit * 5.00 / 1024;                   // Sensor output voltage
   pressureKilopascal = (pressureVoltage - pressureOffSet) * 250; // Calculate water pressure
 
-  Serial.println("Recording pressure");
+  if (debug)
+    Serial.println("Recording pressure");
   // Serial.print("Voltage:");
   // Serial.print(pressureVoltage, 3);
 
@@ -168,17 +198,20 @@ void sendDataThroughBluetooth()
 }
 
 // UTILS
-void printDataArray(unsigned short array[])
+void printDataArray(unsigned short array[], bool debug = false)
 {
-  int count = (int)sizeof(array) / (int)sizeof(array[0]);
+  int countArray = count(array);
   Serial.print("Data : ");
-  Serial.print((int)sizeof(array));
+  Serial.print(countArray);
   Serial.print(" : ");
-  for (int i = 0; i < count; i++)
+  for (int i = 0; i < countArray; i++)
   {
     // Serial.print(i);
-    Serial.print(array[i]);
-    Serial.print(", ");
+    if (debug)
+    {
+      Serial.print(array[i]);
+      Serial.print(", ");
+    }
   }
   Serial.println();
 }
@@ -190,20 +223,16 @@ void printData(float value, int length = 1)
 }
 int addShortToLastAvailableIndex(unsigned short value, unsigned short array[])
 {
-  int count = (int)sizeof(array) / (int)sizeof(array[0]);
-  Serial.print("Count : ");
-  Serial.println(count);
-  for (int i = 0; i < count; i++)
+  // int count = *(&array + 1) - array;
+  // Serial.print("Count : ");
+  // Serial.println(count);
+  int i = 0;
+  while (array[i] != 0 && array[i] != '\0')
   {
-    // Serial.println(i);
-    if (array[i] == 0)
-    {
-      array[i] = value;
-      // Serial.println(array[i]);
-      return i;
-    }
+    i++;
   }
-  return -1;
+  array[i] = value;
+  return i;
 }
 int addFloatToLastAvailableIndex(float value, float array[])
 {
@@ -262,9 +291,15 @@ void loop()
   // Serial.println(pressureData.pressureKilopascal);
 
   int isStored = storePressureData(pressureData, pressureDataBit, pressureDataKilopascal);
-  Serial.println(isStored);
 
-  printDataArray(pressureDataBit);
+  Serial.print("DataCount ");
+  Serial.print(isStored);
+  Serial.print(" \t ");
+  Serial.print("Pressure ");
+  Serial.print(pressureData.pressureKilopascal);
+  Serial.print(" \r\n ");
+
+  // printDataArray(pressureDataBit);
 
   if (!isStored)
   {
