@@ -1,7 +1,8 @@
 
 // CONSTANTS
-const float pressureOffSet = 0.478; // Calibrate with the smallest value at rest
-const int pressureDataCount = 180;  // 180 max = 15min / 5sec(each measurement)
+const float pressureOffSet = 0.478;    // Calibrate with the smallest value at rest
+const int pressureDataCount = 180;     // 180 max = 15min / 5sec(each measurement)
+const int intervalPressureData = 1000; // 5 seconds
 
 // PIN ASSIGNMENTS
 int sens1 = 3;              // Pin sens remplissage
@@ -22,6 +23,8 @@ unsigned short pressureBit;
 unsigned short pressureDataBit[pressureDataCount];
 float pressureVoltage, pressureKilopascal;
 float pressureDataKilopascal[pressureDataCount];
+unsigned long previousMillis = 0;
+unsigned long currentMillis = 0;
 
 struct SPressureData
 {
@@ -68,6 +71,8 @@ void setup()
 
   bool initialized = initializeArray(pressureDataBit);
   Serial.println(initialized);
+
+  currentMillis = millis();
 }
 
 // Fonction d'attente initiale
@@ -80,6 +85,7 @@ void initialWait()
 }
 void waitx(int time) // Fonction d'attente interphase
 {
+  Serial.println("Wait");
   digitalWrite(wait, HIGH);
   digitalWrite(ascent, LOW);
   digitalWrite(dive, LOW);
@@ -97,6 +103,7 @@ void countdown(int time, int phase) // Prévient d'un changement de phase
 }
 void divex(int fillingSpeed) // Fonction de plongée
 {
+  Serial.println("Dive");
   digitalWrite(wait, LOW);
   digitalWrite(ascent, LOW);
   digitalWrite(dive, HIGH);
@@ -116,6 +123,7 @@ void divex(int fillingSpeed) // Fonction de plongée
 }
 void ascentx(int fillingSpeed) // Fonction d'ascension
 {
+  Serial.println("Ascent");
   digitalWrite(wait, LOW);
   digitalWrite(ascent, HIGH);
   digitalWrite(dive, LOW);
@@ -150,9 +158,11 @@ int sizeArray(unsigned short arr[])
   return sizeof(arr) / sizeof(arr[0]);
 }
 
-filterData()
+bool filterData()
+{
+}
 
-    SPressureData collectPressureData(int pinPressureSensor, bool debug = false)
+SPressureData collectPressureData(int pinPressureSensor, bool debug = false)
 {
   pressureBit = analogRead(pinPressureSensor);
   pressureVoltage = pressureBit * 5.00 / 1024;                   // Sensor output voltage
@@ -183,6 +193,37 @@ int storePressureData(
   // return dataStored;
   return index;
 }
+int recordPressureData()
+{
+
+  Serial.println("Data recording ");
+
+  SPressureData pressureData = collectPressureData(pinPressureSensor);
+
+  // Serial.println(pressureData.pressureBit);
+  // Serial.println(pressureData.pressureVoltage);
+  // Serial.println(pressureData.pressureKilopascal);
+
+  int isStored = storePressureData(pressureData, pressureDataBit, pressureDataKilopascal);
+
+  Serial.print("DataCount ");
+  Serial.print(isStored);
+  Serial.print(" \t ");
+  Serial.print("Pressure ");
+  Serial.print(pressureData.pressureKilopascal);
+  Serial.print(" \r\n ");
+
+  // printDataArray(pressureDataBit);
+
+  if (!isStored)
+  {
+    // Serial.println("Data not stored");
+  }
+  // printData(collectPressureData(pinPressureSensor).pressureKilopascal);
+
+  // printDataArray(pressureDataBit);
+}
+
 bool isDataFull()
 {
 }
@@ -250,6 +291,36 @@ int addFloatToLastAvailableIndex(float value, float array[])
   }
   return -1;
 }
+void floatDelayProcedureSequence()
+{
+  Serial.println("Float delay procedure sequence");
+  recordPressureData();
+  while (analogRead(lightSensor) < seuilDetectionL)
+  {
+    initialWait();
+  }
+  recordPressureData();
+  ascentx(255);
+  recordPressureData();
+  // Initial waiting time
+  waitx(5000);
+  countdown(5, wait);
+  recordPressureData();
+  // Initiating dive
+  divex(255);
+  recordPressureData();
+  // Mid-waiting
+  waitx(5000);
+  countdown(5, wait);
+  recordPressureData();
+  // Initiating ascent
+  ascentx(255);
+  recordPressureData();
+  // Final waiting
+  waitx(5000);
+  countdown(5, wait);
+  recordPressureData();
+}
 void floatProcedureSequence()
 {
 
@@ -257,56 +328,24 @@ void floatProcedureSequence()
   {
     initialWait();
   }
-  ascentx(255);
-
-  // Initial waiting time
-  waitx(5000);
-  countdown(5, wait);
-
-  // Initiating dive
-  divex(255);
-
-  // Mid-waiting
-  waitx(5000);
-  countdown(5, wait);
-
-  // Initiating ascent
-  ascentx(255);
-
-  // Final waiting
-  waitx(5000);
-  countdown(5, wait);
+}
+unsigned long actionOnInterval(unsigned long currentMillis, unsigned long previousMillis, int interval, void (*function)())
+{
+  if (currentMillis - previousMillis >= interval)
+  {
+    previousMillis = currentMillis;
+    function();
+  }
+  return previousMillis;
 }
 
 void loop()
 {
-  millis();
 
-  // floatProcedureSequence();
+  // previousMillis = actionOnInterval(currentMillis, previousMillis, intervalPressureData, recordPressureData);
 
-  SPressureData pressureData = collectPressureData(pinPressureSensor);
+  // recordPressureData();
 
-  // Serial.println(pressureData.pressureBit);
-  // Serial.println(pressureData.pressureVoltage);
-  // Serial.println(pressureData.pressureKilopascal);
-
-  int isStored = storePressureData(pressureData, pressureDataBit, pressureDataKilopascal);
-
-  Serial.print("DataCount ");
-  Serial.print(isStored);
-  Serial.print(" \t ");
-  Serial.print("Pressure ");
-  Serial.print(pressureData.pressureKilopascal);
-  Serial.print(" \r\n ");
-
-  // printDataArray(pressureDataBit);
-
-  if (!isStored)
-  {
-    // Serial.println("Data not stored");
-  }
-  // printData(collectPressureData(pinPressureSensor).pressureKilopascal);
-
-  // printDataArray(pressureDataBit);
-  delay(1000);
+  // delay(100);
+  floatDelayProcedureSequence();
 }
